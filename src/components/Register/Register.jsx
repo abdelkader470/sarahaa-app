@@ -40,7 +40,7 @@ function Register() {
       .required("password is required"),
 
     rePassword: Yup.string()
-      .oneOf([Yup.ref("password")])
+      .oneOf([Yup.ref("password")], "rePassword not match")
       .required("rePassword is required"),
 
     age: Yup.number().required("age is required").positive(),
@@ -60,7 +60,7 @@ function Register() {
     },
   });
   return (
-    <div className="w-50 mx-auto my-5 border p-5 bg-white">
+    <div className="w-50 mx-auto my-5 border pt-4 px-5 bg-white">
       <div>
         <i
           className="far fa-edit text-center d-block"
