@@ -5,9 +5,12 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { useQuery } from "react-query";
+import ShareModel from "../ShareModel/ShareModel";
 
 function Profile() {
   const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
+  const [isShown, setIsShown] = useState(false);
   const {
     data: messages,
     isError,
@@ -29,6 +32,7 @@ function Profile() {
   useEffect(() => {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
     setUserId(decoded.id);
+    setUserName(decoded.name);
   }, []);
 
   return (
@@ -38,20 +42,20 @@ function Profile() {
           <a href="#" data-toggle="modal" data-target="#profile">
             <img src={avatar} className="avatar" alt="" />
           </a>
-          <h3 className="py-2">Abdelkader Elsisy</h3>
+          <h3 className="py-2">{userName}</h3>
           {userId && (
-            <Link
+            <button
               data-toggle="modal"
               data-target="#share"
               className="btn btn-default-outline share"
+              onClick={() => setIsShown(true)}
               to={`/message/${userId}`}
             >
               <i className="fas fa-share-alt" /> Share Profile
-            </Link>
+            </button>
           )}
         </div>
       </div>
-
       <div className="container text-center my-5 text-center">
         <div className="row">
           {isLoading ? (
@@ -74,7 +78,7 @@ function Profile() {
             </div>
           ) : (
             messages.map((ele) => (
-              <div key={ele._id} className="col-md-12">
+              <div key={ele._id} className="col-md-12 mb-3">
                 <div className="card py-5">
                   <p>{ele.messageContent}</p>
                 </div>
@@ -83,6 +87,16 @@ function Profile() {
           )}
         </div>
       </div>
+      {isShown ? (
+        <ShareModel
+          setIsShown={setIsShown}
+          isShown={isShown}
+          username={userName}
+          userId={userId}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 }
