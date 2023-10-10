@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function ShareModel(props) {
-  let { username, setIsShown, isShown, userId } = props;
+  let { username, setIsShown, userId } = props;
   return (
     <>
       <div className={styles.meDim}></div>
