@@ -7,9 +7,11 @@ import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Notfound from "./components/Notfound/Notfound";
 import Profile from "./components/Profile/Profile";
+import SendMessage from "./components/SendMessage/SendMessage";
 import { useContext, useEffect } from "react";
 import { tokenContext } from "./context/tokenContext";
 import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const routes = createBrowserRouter([
   {
@@ -27,11 +29,16 @@ const routes = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
+      {
+        path: "message/:id",
+        element: <SendMessage />,
+      },
 
       { path: "*", element: <Notfound /> },
     ],
   },
 ]);
+const queryClient = new QueryClient();
 function App() {
   let { setToken } = useContext(tokenContext);
   useEffect(() => {
@@ -40,7 +47,11 @@ function App() {
     }
   }, []);
 
-  return <RouterProvider router={routes}></RouterProvider>;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={routes}></RouterProvider>;
+    </QueryClientProvider>
+  );
 }
 
 export default App;
