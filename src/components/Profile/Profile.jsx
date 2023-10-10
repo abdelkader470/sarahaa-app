@@ -77,7 +77,13 @@ function Profile() {
               </div>
             </div>
           ) : (
-            <p>hello</p>
+            allMessages.map((ele) => (
+              <div key={ele.id} className="col-md-12">
+                <div className="card py-5">
+                  <p>{ele.messageContent}</p>
+                </div>
+              </div>
+            ))
           )}
         </div>
       </div>
