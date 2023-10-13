@@ -3,24 +3,26 @@ import styles from "./SendMessage.module.css";
 import { useParams } from "react-router-dom";
 import avatar from "../../images/avatar.png";
 import { useFormik } from "formik";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { sendMessage } from "../../Redux/sendMessageSlice";
 
 function SendMessage() {
-  let id = useParams();
+  const id = useParams();
+  const dispatch = useDispatch();
 
-  async function addMessages(values) {
-    let data = {
-      ...values,
-      receivedId: id.id,
-    };
-    let res = await axios.post(
-      "https://sara7aiti.onrender.com/api/v1/message",
-      data
+  const sendingStatus = useSelector((state) => state.messages.sendingStatus);
+  const sentMessage = useSelector((state) => state.messages.sentMessage);
+
+  const addMessages = (values) => {
+    dispatch(
+      sendMessage({
+        messageContent: values.messageContent,
+        receivedId: id.id,
+      })
     );
-    console.log(res);
-  }
+  };
 
-  let formik = useFormik({
+  const formik = useFormik({
     initialValues: {
       messageContent: "",
     },

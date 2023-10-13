@@ -1,39 +1,27 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Profile.module.css";
 import avatar from "../../images/avatar.png";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import jwtDecode from "jwt-decode";
-import { useQuery } from "react-query";
 import ShareModel from "../ShareModel/ShareModel";
-
+import { fetchMessages, selectMessages } from "../../Redux/messagesSlice";
 function Profile() {
   const [userId, setUserId] = useState("");
   const [userName, setUserName] = useState("");
   const [isShown, setIsShown] = useState(false);
-  const {
-    data: messages,
-    isError,
-    isLoading,
-  } = useQuery("messages", fetchMessages);
 
-  async function fetchMessages() {
-    const response = await axios.get(
-      "https://sara7aiti.onrender.com/api/v1/message",
-      {
-        headers: {
-          token: localStorage.getItem("userToken"),
-        },
-      }
-    );
-    return response.data.allMessages;
-  }
+  const dispatch = useDispatch();
+  const messages = useSelector(selectMessages);
+  const isLoading = useSelector((state) => state.messages.status === "loading");
+  const isError = useSelector((state) => state.messages.status === "failed");
 
   useEffect(() => {
     const decoded = jwtDecode(localStorage.getItem("userToken"));
     setUserId(decoded.id);
     setUserName(decoded.name);
-  }, []);
+
+    dispatch(fetchMessages());
+  }, [dispatch]);
 
   return (
     <>

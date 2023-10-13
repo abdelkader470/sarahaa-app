@@ -39,6 +39,7 @@ const routes = createBrowserRouter([
   },
 ]);
 const queryClient = new QueryClient();
+
 function App() {
   let { setToken } = useContext(tokenContext);
   useEffect(() => {
